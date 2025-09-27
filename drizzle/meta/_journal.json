@@ -8,6 +8,48 @@
       "when": 1756202589329,
       "tag": "0000_overjoyed_morlun",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1757926421846,
+      "tag": "0001_loving_the_leader",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1757926500000,
+      "tag": "0002_fix_finance_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1757926600000,
+      "tag": "0003_fix_transaction_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1757926700000,
+      "tag": "0004_fix_asset_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1757926800000,
+      "tag": "0005_fix_investment_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1757926900000,
+      "tag": "0006_fix_document_table",
+      "breakpoints": true
     }
   ]
 }
