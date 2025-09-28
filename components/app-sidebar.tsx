@@ -2,10 +2,8 @@
 
 import * as React from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { useSession, signOut } from "@/lib/auth-client"
 import {
-  IconChartBar,
   IconDashboard,
   IconFile,
   IconFolder,
@@ -13,7 +11,6 @@ import {
   IconReport,
   IconSettings,
   IconTrendingUp,
-  IconUser,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -30,54 +27,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation"
-
-const staticData = {
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: IconDashboard,
-    },
-    {
-      title: "Transactions",
-      url: "/dashboard/transactions",
-      icon: IconMoneybag,
-    },
-    {
-      title: "Assets",
-      url: "/dashboard/assets",
-      icon: IconFolder,
-    },
-    {
-      title: "Investments",
-      url: "/dashboard/investments",
-      icon: IconTrendingUp,
-    },
-    {
-      title: "Documents",
-      url: "/dashboard/documents",
-      icon: IconFile,
-    },
-  ],
-  navClouds: [],
-  navSecondary: [
-    {
-      title: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-  ],
-  documents: [],
-}
+import { useLanguage } from "@/contexts/language-context"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession()
   const router = useRouter()
+  const { t } = useLanguage()
   
   const handleSignOut = async () => {
     await signOut()
@@ -94,6 +49,48 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: "/codeguide-logo.png",
   }
 
+  // Translated navigation items
+  const translatedNavMain = [
+    {
+      title: t('dashboard'),
+      url: "/dashboard",
+      icon: IconDashboard,
+    },
+    {
+      title: t('transactions'),
+      url: "/dashboard/transactions",
+      icon: IconMoneybag,
+    },
+    {
+      title: t('assets'),
+      url: "/dashboard/assets",
+      icon: IconFolder,
+    },
+    {
+      title: t('investments'),
+      url: "/dashboard/investments",
+      icon: IconTrendingUp,
+    },
+    {
+      title: t('documents'),
+      url: "/dashboard/documents",
+      icon: IconFile,
+    },
+    {
+      title: t('reports'),
+      url: "/dashboard/reports",
+      icon: IconReport,
+    },
+  ]
+
+  const translatedNavSecondary = [
+    {
+      title: t('settings'),
+      url: "/dashboard/settings",
+      icon: IconSettings,
+    },
+  ]
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -104,15 +101,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link href="/dashboard">
-                <span className="text-base font-semibold font-parkinsans">Finance Dashboard</span>
+                <span className="text-base font-semibold font-parkinsans">{t('finance_app')}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={staticData.navMain} />
-        <NavSecondary items={staticData.navSecondary} className="mt-auto" />
+        <NavMain items={translatedNavMain} />
+        <NavSecondary items={translatedNavSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser 

@@ -50,6 +50,13 @@
       "when": 1757926900000,
       "tag": "0006_fix_document_table",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1759036809438,
+      "tag": "0007_lovely_spirit",
+      "breakpoints": true
     }
   ]
 }

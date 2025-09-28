@@ -42,8 +42,8 @@ export const getTransactions = async (
     where: and(
       eq(transaction.userId, userId),
       type ? eq(transaction.type, type) : undefined,
-      startDate ? gte(transaction.date, startDate) : undefined,
-      endDate ? lte(transaction.date, endDate) : undefined
+      startDate ? gte(transaction.date, startDate.toISOString().split('T')[0]) : undefined,
+      endDate ? lte(transaction.date, endDate.toISOString().split('T')[0]) : undefined
     ),
     orderBy: [desc(transaction.date)],
     limit: limit,

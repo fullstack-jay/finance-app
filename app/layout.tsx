@@ -5,14 +5,14 @@ import { ThemeProvider } from 'next-themes'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Finance Dashboard',
-    template: '%s | Finance Dashboard'
+    default: 'Financial Applications',
+    template: '%s | Financial Applications'
   },
   description: 'Comprehensive financial management dashboard for tracking transactions, assets, investments, and documents',
-  keywords: ['finance', 'dashboard', 'transactions', 'investments', 'assets', 'financial management'],
-  authors: [{ name: 'Finance Dashboard Team' }],
-  creator: 'Finance Dashboard',
-  publisher: 'Finance Dashboard',
+  keywords: ['keuangan', 'dashboard', 'transactions', 'investments', 'assets', 'financial management'],
+  authors: [{ name: 'Financial Applications Team' }],
+  creator: 'Financial Applications',
+  publisher: 'Financial Applications',
   robots: {
     index: false,
     follow: false,

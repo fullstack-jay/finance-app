@@ -33,6 +33,8 @@ import {
 } from '@/components/ui/select';
 import { useSession } from '@/lib/auth-client';
 import { useLanguage } from '@/contexts/language-context';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 
 // Helper function to format currency in IDR
@@ -171,7 +173,7 @@ export default function AssetsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this asset?')) {
+    if (confirm(t('confirm_delete_asset'))) {
       try {
         const response = await fetch(`/api/assets/${id}`, {
           method: 'DELETE',
@@ -180,10 +182,10 @@ export default function AssetsPage() {
         if (response.ok) {
           await fetchData();
         } else {
-          console.error('Failed to delete asset');
+          console.error(t('failed_to_delete_asset'));
         }
       } catch (error) {
-        console.error('Error deleting asset:', error);
+        console.error(t('error_deleting_asset'), error);
       }
     }
   };
@@ -215,7 +217,7 @@ export default function AssetsPage() {
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading assets...</p>
+          <p className="mt-4 text-muted-foreground">{t('loading_assets')}</p>
         </div>
       </div>
     );
@@ -223,45 +225,51 @@ export default function AssetsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Assets</h1>
-        <p className="text-muted-foreground">
-          Manage your company assets
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">{t('assets')}</h1>
+          <p className="text-muted-foreground">
+            {t('manage_company_assets')}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Assets</CardTitle>
+              <CardTitle>{t('all_assets')}</CardTitle>
               <CardDescription>
-                View and manage your company assets
+                {t('view_manage_company_assets')}
               </CardDescription>
             </div>
             <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Asset
+                  {t('add_asset')}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>
-                    {editingAsset ? 'Edit Asset' : 'Add Asset'}
-                  </DialogTitle>
+                  {editingAsset ? t('edit_asset') : t('add_asset')}
+                </DialogTitle>
                   <DialogDescription>
                     {editingAsset 
-                      ? 'Edit your asset details' 
-                      : 'Add a new company asset'}
+                      ? t('edit_asset_details') 
+                      : t('add_new_company_asset')}
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="name" className="text-right">
-                        Name
+                        {t('name')}
                       </Label>
                       <Input
                         id="name"
@@ -274,7 +282,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="description" className="text-right">
-                        Description
+                        {t('description')}
                       </Label>
                       <Input
                         id="description"
@@ -286,7 +294,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="purchaseDate" className="text-right">
-                        Purchase Date
+                        {t('purchase_date')}
                       </Label>
                       <Input
                         id="purchaseDate"
@@ -300,7 +308,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="purchasePrice" className="text-right">
-                        Purchase Price
+                        {t('purchase_price')}
                       </Label>
                       <Input
                         id="purchasePrice"
@@ -315,7 +323,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="currentValue" className="text-right">
-                        Current Value
+                        {t('current_value')}
                       </Label>
                       <Input
                         id="currentValue"
@@ -329,7 +337,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="depreciationRate" className="text-right">
-                        Depreciation (%)
+                        {t('depreciation_rate')}
                       </Label>
                       <Input
                         id="depreciationRate"
@@ -343,7 +351,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="category" className="text-right">
-                        Category
+                        {t('category')}
                       </Label>
                       <Select
                         value={formData.categoryId.toString()}
@@ -364,7 +372,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="maintenanceSchedule" className="text-right">
-                        Maintenance
+                        {t('maintenance')}
                       </Label>
                       <Input
                         id="maintenanceSchedule"
@@ -376,7 +384,7 @@ export default function AssetsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="insuranceInfo" className="text-right">
-                        Insurance
+                        {t('insurance')}
                       </Label>
                       <Input
                         id="insuranceInfo"
@@ -388,7 +396,7 @@ export default function AssetsPage() {
                   </div>
                   <DialogFooter>
                     <Button type="submit">
-                      {editingAsset ? 'Update Asset' : 'Add Asset'}
+                      {editingAsset ? t('update_asset') : t('add_asset')}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -447,10 +455,10 @@ export default function AssetsPage() {
             </Table>
           ) : (
             <div className="text-center py-8 text-muted-foreground">
-              <p>No assets found</p>
+              <p>{t('no_assets_found')}</p>
               <Button className="mt-4" onClick={() => setIsDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
-                Add your first asset
+                {t('add_first_asset')}
               </Button>
             </div>
           )}

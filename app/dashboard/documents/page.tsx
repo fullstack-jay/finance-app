@@ -32,6 +32,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useSession } from '@/lib/auth-client';
+import { useLanguage } from '@/contexts/language-context';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { Plus, Edit, Trash2, ExternalLink } from 'lucide-react';
 
 interface Document {
@@ -48,6 +51,7 @@ export default function DocumentsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingDocument, setEditingDocument] = useState<Document | null>(null);
   const { data: session } = useSession();
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -115,7 +119,7 @@ export default function DocumentsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this document?')) {
+    if (confirm(t('confirm_delete_document'))) {
       try {
         const response = await fetch(`/api/documents/${id}`, {
           method: 'DELETE',
@@ -124,10 +128,10 @@ export default function DocumentsPage() {
         if (response.ok) {
           await fetchData();
         } else {
-          console.error('Failed to delete document');
+          console.error(t('failed_to_delete_document'));
         }
       } catch (error) {
-        console.error('Error deleting document:', error);
+        console.error(t('error_deleting_document'), error);
       }
     }
   };
@@ -153,7 +157,7 @@ export default function DocumentsPage() {
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading documents...</p>
+          <p className="mt-4 text-muted-foreground">{t('loading_documents')}</p>
         </div>
       </div>
     );
@@ -161,45 +165,51 @@ export default function DocumentsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Documents</h1>
-        <p className="text-muted-foreground">
-          Manage your financial documents
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">{t('documents')}</h1>
+          <p className="text-muted-foreground">
+            {t('manage_financial_documents')}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Documents</CardTitle>
+              <CardTitle>{t('all_documents')}</CardTitle>
               <CardDescription>
-                View and manage your financial documents
+                {t('view_manage_financial_documents')}
               </CardDescription>
             </div>
             <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Upload Document
+                  {t('upload_document')}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>
-                    {editingDocument ? 'Edit Document' : 'Upload Document'}
-                  </DialogTitle>
+                  {editingDocument ? t('edit_document') : t('upload_document')}
+                </DialogTitle>
                   <DialogDescription>
                     {editingDocument 
-                      ? 'Edit your document details' 
-                      : 'Add a new financial document'}
+                      ? t('edit_document_details') 
+                      : t('add_new_financial_document')}
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="name" className="text-right">
-                        Name
+                        {t('name')}
                       </Label>
                       <Input
                         id="name"
@@ -225,28 +235,28 @@ export default function DocumentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="type" className="text-right">
-                        Type
+                        {t('type')}
                       </Label>
                       <Select
                         value={formData.type}
                         onValueChange={(value) => setFormData({...formData, type: value})}
                       >
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Select type" />
+                          <SelectValue placeholder={t('select_type')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="receipt">Receipt</SelectItem>
-                          <SelectItem value="invoice">Invoice</SelectItem>
-                          <SelectItem value="contract">Contract</SelectItem>
-                          <SelectItem value="statement">Statement</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                          <SelectItem value="receipt">{t('receipt')}</SelectItem>
+                          <SelectItem value="invoice">{t('invoice')}</SelectItem>
+                          <SelectItem value="contract">{t('contract')}</SelectItem>
+                          <SelectItem value="statement">{t('statement')}</SelectItem>
+                          <SelectItem value="other">{t('other')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
                   <DialogFooter>
                     <Button type="submit">
-                      {editingDocument ? 'Update Document' : 'Upload Document'}
+                      {editingDocument ? t('update_document') : t('upload_document')}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -259,10 +269,10 @@ export default function DocumentsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Upload Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('type')}</TableHead>
+                  <TableHead>{t('upload_date')}</TableHead>
+                  <TableHead className="text-right">{t('actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -304,10 +314,10 @@ export default function DocumentsPage() {
             </Table>
           ) : (
             <div className="text-center py-8 text-muted-foreground">
-              <p>No documents found</p>
+              <p>{t('no_documents_found')}</p>
               <Button className="mt-4" onClick={() => setIsDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
-                Upload your first document
+                {t('upload_first_document')}
               </Button>
             </div>
           )}

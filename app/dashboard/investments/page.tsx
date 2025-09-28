@@ -33,6 +33,8 @@ import {
 } from '@/components/ui/select';
 import { useSession } from '@/lib/auth-client';
 import { useLanguage } from '@/contexts/language-context';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 
 // Helper function to format currency in IDR
@@ -172,7 +174,7 @@ export default function InvestmentsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this investment?')) {
+    if (confirm(t('confirm_delete_investment'))) {
       try {
         const response = await fetch(`/api/investments/${id}`, {
           method: 'DELETE',
@@ -181,10 +183,10 @@ export default function InvestmentsPage() {
         if (response.ok) {
           await fetchData();
         } else {
-          console.error('Failed to delete investment');
+          console.error(t('failed_to_delete_investment'));
         }
       } catch (error) {
-        console.error('Error deleting investment:', error);
+        console.error(t('error_deleting_investment'), error);
       }
     }
   };
@@ -216,7 +218,7 @@ export default function InvestmentsPage() {
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading investments...</p>
+          <p className="mt-4 text-muted-foreground">{t('loading_investments')}</p>
         </div>
       </div>
     );
@@ -224,45 +226,51 @@ export default function InvestmentsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Investments</h1>
-        <p className="text-muted-foreground">
-          Manage your investment portfolio
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">{t('investments')}</h1>
+          <p className="text-muted-foreground">
+            {t('manage_investment_portfolio')}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Investments</CardTitle>
+              <CardTitle>{t('all_investments')}</CardTitle>
               <CardDescription>
-                View and manage your investments
+                {t('view_manage_investments')}
               </CardDescription>
             </div>
             <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Investment
+                  {t('add_investment')}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>
-                    {editingInvestment ? 'Edit Investment' : 'Add Investment'}
-                  </DialogTitle>
+                  {editingInvestment ? t('edit_investment') : t('add_investment')}
+                </DialogTitle>
                   <DialogDescription>
                     {editingInvestment 
-                      ? 'Edit your investment details' 
-                      : 'Add a new investment to your portfolio'}
+                      ? t('edit_investment_details') 
+                      : t('add_new_investment_to_portfolio')}
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="name" className="text-right">
-                        Name
+                        {t('name')}
                       </Label>
                       <Input
                         id="name"
@@ -275,7 +283,7 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="description" className="text-right">
-                        Description
+                        {t('description')}
                       </Label>
                       <Input
                         id="description"
@@ -287,7 +295,7 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="type" className="text-right">
-                        Type
+                        {t('type')}
                       </Label>
                       <Input
                         id="type"
@@ -300,7 +308,7 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="purchaseDate" className="text-right">
-                        Purchase Date
+                        {t('purchase_date')}
                       </Label>
                       <Input
                         id="purchaseDate"
@@ -314,7 +322,7 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="purchasePrice" className="text-right">
-                        Purchase Price
+                        {t('purchase_price')}
                       </Label>
                       <Input
                         id="purchasePrice"
@@ -329,7 +337,7 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="currentValue" className="text-right">
-                        Current Value
+                        {t('current_value')}
                       </Label>
                       <Input
                         id="currentValue"
@@ -343,7 +351,7 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="quantity" className="text-right">
-                        Quantity
+                        {t('quantity')}
                       </Label>
                       <Input
                         id="quantity"
@@ -357,7 +365,7 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="roi" className="text-right">
-                        ROI (%)
+                        {t('roi_percent')}
                       </Label>
                       <Input
                         id="roi"
@@ -371,19 +379,19 @@ export default function InvestmentsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="category" className="text-right">
-                        Category
+                        {t('category')}
                       </Label>
                       <Select
                         value={formData.categoryId.toString()}
                         onValueChange={(value) => setFormData({...formData, categoryId: parseInt(value)})}
                       >
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Select category" />
+                          <SelectValue placeholder={t('select_category')} />
                         </SelectTrigger>
                         <SelectContent>
                           {categories.map((category) => (
                             <SelectItem key={category.id} value={category.id.toString()}>
-                              {category.name}
+                              {t(category.name.toLowerCase()) || category.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -392,7 +400,7 @@ export default function InvestmentsPage() {
                   </div>
                   <DialogFooter>
                     <Button type="submit">
-                      {editingInvestment ? 'Update Investment' : 'Add Investment'}
+                      {editingInvestment ? t('update_investment') : t('add_investment')}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -459,10 +467,10 @@ export default function InvestmentsPage() {
             </Table>
           ) : (
             <div className="text-center py-8 text-muted-foreground">
-              <p>No investments found</p>
+              <p>{t('no_investments_found')}</p>
               <Button className="mt-4" onClick={() => setIsDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
-                Add your first investment
+                {t('add_first_investment')}
               </Button>
             </div>
           )}

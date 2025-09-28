@@ -2,6 +2,7 @@ import { cookies } from "next/headers"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
+import { LanguageProvider } from "@/contexts/language-context"
 import {
   SidebarInset,
   SidebarProvider,
@@ -24,22 +25,24 @@ export default async function DashboardLayout({
       enableSystem
       disableTransitionOnChange
     >
-      <SidebarProvider
-        defaultOpen={defaultOpen}
-        style={
-          {
-            "--sidebar-width": "calc(var(--spacing) * 72)",
-          } as React.CSSProperties
-        }
-      >
-        <AppSidebar variant="inset" />
-        <SidebarInset>
-          <SiteHeader />
-          <div className="flex flex-1 flex-col p-4">
-            {children}
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
+      <LanguageProvider>
+        <SidebarProvider
+          defaultOpen={defaultOpen}
+          style={
+            {
+              "--sidebar-width": "calc(var(--spacing) * 72)",
+            } as React.CSSProperties
+          }
+        >
+          <AppSidebar variant="inset" />
+          <SidebarInset>
+            <SiteHeader />
+            <div className="flex flex-1 flex-col p-4">
+              {children}
+            </div>
+          </SidebarInset>
+        </SidebarProvider>
+      </LanguageProvider>
     </ThemeProvider>
   )
 }

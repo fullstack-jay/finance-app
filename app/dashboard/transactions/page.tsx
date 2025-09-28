@@ -33,6 +33,8 @@ import {
 } from '@/components/ui/select';
 import { useSession } from '@/lib/auth-client';
 import { useLanguage } from '@/contexts/language-context';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 
 // Helper function to format currency in IDR
@@ -116,10 +118,11 @@ export default function TransactionsPage() {
 
   const fetchData = async () => {
     try {
-      // Fetch categories
+      // Fetch categories without any type filtering to get all categories
       const categoriesResponse = await fetch('/api/categories');
       if (categoriesResponse.ok) {
         const categoriesData = await categoriesResponse.json();
+        console.log('All categories:', categoriesData); // Debug log
         setCategories(categoriesData);
       }
 
@@ -164,23 +167,23 @@ export default function TransactionsPage() {
         
         // Show success toast
         if (editingTransaction) {
-          toast.success('Transaction updated', {
-            description: 'Your transaction has been successfully updated.',
+          toast.success(t('transaction_updated'), {
+            description: t('transaction_successfully_updated'),
           });
         } else {
-          toast.success('Transaction created', {
-            description: 'Your transaction has been successfully created.',
+          toast.success(t('transaction_created'), {
+            description: t('transaction_successfully_created'),
           });
         }
       } else {
-        toast.error('Error', {
-          description: 'Failed to save transaction. Please try again.',
+        toast.error(t('error'), {
+          description: t('failed_to_save_transaction'),
         });
       }
     } catch (error) {
-      console.error('Error saving transaction:', error);
-      toast.error('Error', {
-        description: 'An error occurred while saving the transaction.',
+      console.error(t('error_saving_transaction'), error);
+      toast.error(t('error'), {
+        description: t('error_occurred_while_saving_transaction'),
       });
     }
   };
@@ -198,7 +201,7 @@ export default function TransactionsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this transaction?')) {
+    if (confirm(t('confirm_delete_transaction'))) {
       try {
         const response = await fetch(`/api/transactions/${id}`, {
           method: 'DELETE',
@@ -206,18 +209,18 @@ export default function TransactionsPage() {
         
         if (response.ok) {
           await fetchData();
-          toast.success('Transaction deleted', {
-            description: 'Your transaction has been successfully deleted.',
+          toast.success(t('transaction_deleted'), {
+            description: t('transaction_successfully_deleted'),
           });
         } else {
-          toast.error('Error', {
-            description: 'Failed to delete transaction. Please try again.',
+          toast.error(t('error'), {
+            description: t('failed_to_delete_transaction'),
           });
         }
       } catch (error) {
-        console.error('Error deleting transaction:', error);
-        toast.error('Error', {
-          description: 'An error occurred while deleting the transaction.',
+        console.error(t('error_deleting_transaction'), error);
+        toast.error(t('error'), {
+          description: t('error_occurred_while_deleting_transaction'),
         });
       }
     }
@@ -243,7 +246,7 @@ export default function TransactionsPage() {
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading transactions...</p>
+          <p className="mt-4 text-muted-foreground">{t('loading_transactions')}</p>
         </div>
       </div>
     );
@@ -251,63 +254,69 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Transactions</h1>
-        <p className="text-muted-foreground">
-          Manage your income and expenses
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">{t('transactions')}</h1>
+          <p className="text-muted-foreground">
+            {t('manage_income_expenses')}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Transactions</CardTitle>
+              <CardTitle>{t('all_transactions')}</CardTitle>
               <CardDescription>
-                View and manage your financial transactions
+                {t('view_manage_financial_transactions')}
               </CardDescription>
             </div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Transaction
+                  {t('add_transaction')}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>
-                    {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
+                    {editingTransaction ? t('edit_transaction') : t('add_transaction')}
                   </DialogTitle>
                   <DialogDescription>
                     {editingTransaction 
-                      ? 'Edit your transaction details' 
-                      : 'Add a new income or expense transaction'}
+                      ? t('edit_transaction_details') 
+                      : t('add_new_income_expense_transaction')}
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="type" className="text-right">
-                        Type
+                        {t('type')}
                       </Label>
                       <Select
                         value={formData.type}
                         onValueChange={(value) => setFormData({...formData, type: value as 'income' | 'expense'})}
                       >
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Select type" />
+                          <SelectValue placeholder={t('select_type')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="income">Income</SelectItem>
-                          <SelectItem value="expense">Expense</SelectItem>
+                          <SelectItem value="income">{t('income')}</SelectItem>
+                          <SelectItem value="expense">{t('expense')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="amount" className="text-right">
-                        Amount
+                        {t('amount')}
                       </Label>
                       <Input
                         id="amount"
@@ -322,7 +331,7 @@ export default function TransactionsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="description" className="text-right">
-                        Description
+                        {t('description')}
                       </Label>
                       <Input
                         id="description"
@@ -335,7 +344,7 @@ export default function TransactionsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="date" className="text-right">
-                        Date
+                        {t('date')}
                       </Label>
                       <Input
                         id="date"
@@ -349,30 +358,39 @@ export default function TransactionsPage() {
                     
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="category" className="text-right">
-                        Category
+                        {t('category')}
                       </Label>
                       <Select
                         value={formData.categoryId != null && formData.categoryId > 0 ? formData.categoryId.toString() : ""}
                         onValueChange={(value) => setFormData({...formData, categoryId: parseInt(value) || 0})}
                       >
                         <SelectTrigger className="col-span-3">
-                          <SelectValue placeholder="Select category" />
+                          <SelectValue placeholder={t('select_category')} />
                         </SelectTrigger>
                         <SelectContent>
-                          {categories
-                            .filter(cat => cat.type === formData.type || cat.type === 'transaction')
-                            .map((category) => (
-                              <SelectItem key={category.id} value={category.id.toString()}>
-                                {category.name}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
+                        {(() => {
+                          const filtered = categories.filter(cat => {
+                            // Show all categories that match the transaction type or are general transaction categories
+                            const matches = cat.type === formData.type || 
+                                   cat.type === 'transaction' || 
+                                   !cat.type;
+                            console.log(`Category ${cat.name}: type=${cat.type}, matches=${matches}`); // Debug log
+                            return matches;
+                          });
+                          console.log('Filtered categories for type', formData.type, ':', filtered); // Debug log
+                          return filtered.map((category) => (
+                            <SelectItem key={category.id} value={category.id.toString()}>
+                              {t(category.name.toLowerCase()) || category.name}
+                            </SelectItem>
+                          ));
+                        })()}
+                      </SelectContent>
                       </Select>
                     </div>
                   </div>
                   <DialogFooter>
                     <Button type="submit">
-                      {editingTransaction ? 'Update Transaction' : 'Add Transaction'}
+                      {editingTransaction ? t('update_transaction') : t('add_transaction')}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -435,10 +453,10 @@ export default function TransactionsPage() {
             </Table>
           ) : (
             <div className="text-center py-8 text-muted-foreground">
-              <p>No transactions found</p>
+              <p>{t('no_transactions_found')}</p>
               <Button className="mt-4" onClick={() => setIsDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
-                Add your first transaction
+                {t('add_first_transaction')}
               </Button>
             </div>
           )}

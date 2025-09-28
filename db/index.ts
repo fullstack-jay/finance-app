@@ -3,6 +3,7 @@ import { Pool } from "pg";
 import 'dotenv/config';
 import * as auth from "./schema/auth"
 import * as finance from "./schema/finance"
+import * as profile from "./schema/profile"
 
 // Create a PostgreSQL pool
 const pool = new Pool({
@@ -13,7 +14,8 @@ const pool = new Pool({
 export const db = drizzle(pool, {
   schema: {
     ...auth,
-    ...finance
+    ...finance,
+    ...profile
   }
 });
 
