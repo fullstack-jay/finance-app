@@ -1,4 +1,14 @@
-import { auth } from "@/lib/auth"; // path to your auth file
-import { toNextJsHandler } from "better-auth/next-js";
+import { auth } from "@clerk/nextjs/server";
 
-export const { POST, GET } = toNextJsHandler(auth);
+export async function GET(req: Request) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  return new Response(JSON.stringify({ message: `Hello user ${userId}` }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+}

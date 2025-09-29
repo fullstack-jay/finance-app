@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useSession, signOut } from "@/lib/auth-client"
+import { useUser, useClerk } from "@clerk/nextjs"
 import {
   IconDashboard,
   IconFile,
@@ -30,7 +30,8 @@ import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: session } = useSession()
+  const { user, isSignedIn, isLoaded } = useUser()
+  const { signOut } = useClerk()
   const router = useRouter()
   const { t } = useLanguage()
   
@@ -39,10 +40,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     router.push("/sign-in")
   }
 
-  const userData = session?.user ? {
-    name: session.user.name || "User",
-    email: session.user.email,
-    avatar: session.user.image || "/codeguide-logo.png",
+  const userData = isSignedIn && user ? {
+    name: user.fullName || user.firstName || "User",
+    email: user.emailAddresses[0]?.emailAddress || "",
+    avatar: user.imageUrl || "/codeguide-logo.png",
   } : {
     name: "Guest",
     email: "guest@example.com", 

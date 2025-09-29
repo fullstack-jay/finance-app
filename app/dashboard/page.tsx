@@ -20,6 +20,8 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { useLanguage } from '@/contexts/language-context';
 import { TrendingUp, TrendingDown, Wallet, CreditCard, PiggyBank, ChartLine, Plus, Home, FileText, ArrowRight } from 'lucide-react';
+import { FinancialChat } from '@/components/financial-chat';
+import { FinancialInsights } from '@/components/financial-insights';
 
 // Helper function to format currency in IDR
 const formatCurrency = (value: number | string | undefined | null): string => {
@@ -258,65 +260,76 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-        {quickActions.map((action) => (
-          <Card key={action.titleKey} className="hover:bg-muted/50 transition-colors">
-            <Link href={action.href}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t(action.titleKey)}</CardTitle>
-                {action.icon}
-              </CardHeader>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">
-                  {t(action.descriptionKey)}
-                </div>
-              </CardContent>
-            </Link>
-          </Card>
-        ))}
-      </div>
+      {/* Financial Chat and Insights */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 gap-4">
+            {quickActions.map((action) => (
+              <Card key={action.titleKey} className="hover:bg-muted/50 transition-colors">
+                <Link href={action.href}>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">{t(action.titleKey)}</CardTitle>
+                    {action.icon}
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-sm text-muted-foreground">
+                      {t(action.descriptionKey)}
+                    </div>
+                  </CardContent>
+                </Link>
+              </Card>
+            ))}
+          </div>
 
-      {/* Recent Transactions */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">{t('recent_transactions')}</h2>
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/dashboard/transactions">
-              {t('view_all')} <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          {/* Recent Transactions */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold">{t('recent_transactions')}</h2>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/dashboard/transactions">
+                  {t('view_all')} <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t('description')}</TableHead>
+                    <TableHead>{t('category')}</TableHead>
+                    <TableHead>{t('date')}</TableHead>
+                    <TableHead className="text-right">{t('amount')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentTransactions.map((transaction) => (
+                    <TableRow key={transaction.id}>
+                      <TableCell className="font-medium">{transaction.description}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{transaction.category?.name || t('no_category')}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(transaction.date), 'MMM dd, yyyy')}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}>
+                          {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
         </div>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('description')}</TableHead>
-                <TableHead>{t('category')}</TableHead>
-                <TableHead>{t('date')}</TableHead>
-                <TableHead className="text-right">{t('amount')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentTransactions.map((transaction) => (
-                <TableRow key={transaction.id}>
-                  <TableCell className="font-medium">{transaction.description}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{transaction.category?.name || t('no_category')}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(transaction.date), 'MMM dd, yyyy')}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <span className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}>
-                      {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
-                    </span>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        {/* Financial Chat and Insights Components */}
+        <div className="space-y-6">
+          <FinancialInsights />
+          <FinancialChat />
         </div>
       </div>
     </div>

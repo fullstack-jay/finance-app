@@ -1,3 +1,7 @@
+
+> codeguide-starter-fullstack@0.1.0 dev
+> next dev --turbopack --port 3000
+
  ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /Users/user/package-lock.json as the root directory.
  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
@@ -5,14 +9,127 @@
  Detected additional lockfiles: 
    * /Users/user/DATA UTAMA/01 Project/PROJECT NEXT JS/finance-app/package-lock.json
 
- ⚠ Port 3000 is in use by process 30676, using available port 3001 instead.
    ▲ Next.js 15.5.0 (Turbopack)
-   - Local:        http://localhost:3001
-   - Network:      http://192.168.18.33:3001
-   - Environments: .env
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.18.33:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
 
  ✓ Starting...
- ○ Compiling middleware ...
- ✓ Compiled middleware in 646ms
- ✓ Ready in 1589ms
-[?25h
+ ✓ Compiled middleware in 181ms
+ ✓ Ready in 979ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1991ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /dashboard 200 in 2364ms
+ POST /dashboard 200 in 97ms
+ ✓ Compiled /api/dashboard in 453ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/dashboard 500 in 816ms
+ ✓ Compiled /api/transactions in 119ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/transactions?limit=5 500 in 388ms
+ ✓ Compiled /api/financial-insights in 459ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 725ms
+ POST /api/financial-insights 500 in 1356ms
+ POST /api/financial-insights 500 in 1371ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /dashboard 200 in 121ms
+ POST /dashboard 200 in 64ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/dashboard 500 in 300ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/transactions?limit=5 500 in 266ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ POST /api/financial-insights 500 in 107ms
+ POST /api/financial-insights 500 in 102ms
+ ✓ Compiled in 129ms
+ ✓ Compiled in 113ms
+ ✓ Compiled /api/financial-chat in 151ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ POST /api/financial-chat 500 in 249ms
+ ✓ Compiled in 123ms
+ ✓ Compiled in 125ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ POST /api/financial-chat 500 in 74ms
+ ✓ Compiled middleware in 1ms
+ ✓ Compiled in 32ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /dashboard 200 in 224ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /dashboard 200 in 170ms
+ POST /dashboard 200 in 77ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/dashboard 500 in 503ms
+ POST /dashboard 200 in 77ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/dashboard 500 in 302ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/transactions?limit=5 500 in 358ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ POST /api/financial-insights 500 in 164ms
+ POST /api/financial-insights 500 in 172ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/transactions?limit=5 500 in 320ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /dashboard 200 in 279ms
+ POST /dashboard 200 in 47ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/dashboard 500 in 293ms
+[TypeError: Function.prototype.apply was called on #<Promise>, which is an object and not a function]
+ GET /api/transactions?limit=5 500 in 266ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ POST /api/financial-insights 500 in 104ms
+ POST /api/financial-insights 500 in 103ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ POST /api/financial-chat 500 in 107ms
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ ⨯ [Error: The edge runtime does not support Node.js 'crypto' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime]
+ POST /api/financial-chat 500 in 57ms

@@ -1,19 +1,10 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@/db"; // your drizzle instance
-import { account, session, user, verification } from "@/db/schema/auth";
+// This file is no longer needed since we're using Clerk for authentication
+// Keeping this placeholder for any legacy components that might still import from here
+export const auth = null;
 
-export const auth = betterAuth({
-    database: drizzleAdapter(db, {
-        provider: "pg", // or "mysql", "sqlite"
-        schema: {
-            user: user,
-            account: account,
-            session: session,
-            verification: verification,
-        }
-    }),
-    emailAndPassword: {
-        enabled: true,
-    },
-});
+// Export a mock object to prevent errors in legacy imports
+export const mockAuth = {
+    api: {
+        getSession: async () => null,
+    }
+};

@@ -21,7 +21,7 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
     return NextResponse.json(transactions);
   } catch (error) {
     console.error('Error fetching transactions:', error);
-    return NextResponse.json({ error: 'Failed to fetch transactions' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch transactions', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 });
 

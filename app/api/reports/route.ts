@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { auth } from '@/lib/auth';
+import { currentUser } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { user } from '@/db/schema/auth';
 import { transaction, asset, investment } from '@/db/schema/finance';
@@ -9,21 +9,24 @@ import { id } from 'date-fns/locale';
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: req.headers,
-    });
+    // Get the current user from Clerk
+    const user = await currentUser();
     
-    if (!session) {
+    if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user ID from session
-    const userId = session.user.id;
+    // Use Clerk's user ID
+    const userId = user.id;
 
     // Calculate report summary data
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    
+    // Format dates for database queries
+    const startOfMonthStr = startOfMonth.toISOString().split('T')[0];
+    const endOfMonthStr = endOfMonth.toISOString().split('T')[0];
 
     // Get total income for current month
     const incomeTransactions = await db
@@ -33,8 +36,8 @@ export async function GET(req: NextRequest) {
         and(
           eq(transaction.userId, userId),
           eq(transaction.type, 'income'),
-          gte(transaction.date, startOfMonth.toISOString().split('T')[0]),
-          lte(transaction.date, endOfMonth.toISOString().split('T')[0])
+          gte(transaction.date, startOfMonthStr),
+          lte(transaction.date, endOfMonthStr)
         )
       );
 
@@ -48,8 +51,8 @@ export async function GET(req: NextRequest) {
         and(
           eq(transaction.userId, userId),
           eq(transaction.type, 'expense'),
-          gte(transaction.date, startOfMonth.toISOString().split('T')[0]),
-          lte(transaction.date, endOfMonth.toISOString().split('T')[0])
+          gte(transaction.date, startOfMonthStr),
+          lte(transaction.date, endOfMonthStr)
         )
       );
 
@@ -81,6 +84,10 @@ export async function GET(req: NextRequest) {
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
     
+    // Format dates for database queries
+    const lastMonthStartStr = lastMonthStart.toISOString().split('T')[0];
+    const lastMonthEndStr = lastMonthEnd.toISOString().split('T')[0];
+    
     const lastMonthIncomeTransactions = await db
       .select()
       .from(transaction)
@@ -88,8 +95,8 @@ export async function GET(req: NextRequest) {
         and(
           eq(transaction.userId, userId),
           eq(transaction.type, 'income'),
-          gte(transaction.date, lastMonthStart.toISOString().split('T')[0]),
-          lte(transaction.date, lastMonthEnd.toISOString().split('T')[0])
+          gte(transaction.date, lastMonthStartStr),
+          lte(transaction.date, lastMonthEndStr)
         )
       );
     
@@ -102,8 +109,8 @@ export async function GET(req: NextRequest) {
         and(
           eq(transaction.userId, userId),
           eq(transaction.type, 'expense'),
-          gte(transaction.date, lastMonthStart.toISOString().split('T')[0]),
-          lte(transaction.date, lastMonthEnd.toISOString().split('T')[0])
+          gte(transaction.date, lastMonthStartStr),
+          lte(transaction.date, lastMonthEndStr)
         )
       );
     

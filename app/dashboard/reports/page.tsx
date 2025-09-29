@@ -98,6 +98,8 @@ export default function ReportsPage() {
         setTransactions(transactionsData);
       } else {
         console.error('Failed to fetch transactions:', transactionsResponse.status);
+        // Set an empty array instead of failing completely
+        setTransactions([]);
       }
     } catch (error) {
       console.error('Error fetching report data:', error);

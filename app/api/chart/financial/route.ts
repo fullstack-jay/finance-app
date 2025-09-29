@@ -2,19 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { transaction } from '@/db/schema/finance';
 import { eq, and, gte, lte } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
+import { currentUser } from '@clerk/nextjs/server';
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: req.headers,
-    });
+    const user = await currentUser();
     
-    if (!session) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const userId = session.user.id;
+    const userId = user.id;
     
     // Get the date range from query parameters
     const { searchParams } = new URL(req.url);

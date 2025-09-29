@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { headers } from 'next/headers';
-import { auth } from "@/lib/auth";
+import { auth, currentUser } from '@clerk/nextjs/server';
 
 export interface AuthenticatedRequest extends NextRequest {
   user?: {
@@ -10,18 +9,21 @@ export interface AuthenticatedRequest extends NextRequest {
   };
 }
 
-export function withAuth(handler: (req: AuthenticatedRequest, context: { params: Promise<Record<string, string>> }) => Promise<NextResponse>) {
-  return async function(req: NextRequest, context: { params: Promise<Record<string, string>> }) {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+export async function withAuth(handler: (req: AuthenticatedRequest, context: { params: any }) => Promise<NextResponse>) {
+  return async function(req: NextRequest, context: { params: any }) {
+    // Get the authenticated user from Clerk
+    const user = await currentUser();
     
-    if (!session) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
     const authenticatedReq = req as AuthenticatedRequest;
-    authenticatedReq.user = session.user as { id: string; name: string; email: string };
+    authenticatedReq.user = {
+      id: user.id,
+      name: user.firstName || user.lastName ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : user.username || 'User',
+      email: user.emailAddresses[0]?.emailAddress || ''
+    };
     
     try {
       return await handler(authenticatedReq, context);
@@ -30,4 +32,10 @@ export function withAuth(handler: (req: AuthenticatedRequest, context: { params:
       return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
   };
+}
+
+// Function to get user ID directly for use in API routes
+export async function getAuthUserId() {
+  const user = await currentUser();
+  return user ? user.id : null;
 }

@@ -5,6 +5,8 @@ import { user } from '@/db/schema/auth';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
+export const runtime = 'nodejs';
+
 // Schema for profile update request
 const profileUpdateSchema = z.object({
   name: z.string().min(1, 'Name is required').optional(),

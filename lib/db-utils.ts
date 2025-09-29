@@ -38,28 +38,55 @@ export const getTransactions = async (
   endDate?: Date,
   limit?: number
 ) => {
-  return await db.query.transaction.findMany({
-    where: and(
-      eq(transaction.userId, userId),
-      type ? eq(transaction.type, type) : undefined,
-      startDate ? gte(transaction.date, startDate.toISOString().split('T')[0]) : undefined,
-      endDate ? lte(transaction.date, endDate.toISOString().split('T')[0]) : undefined
-    ),
-    orderBy: [desc(transaction.date)],
-    limit: limit,
-    with: {
-      category: {
-        columns: {
-          id: true,
-          name: true,
-          type: true,
-          description: true,
-          createdAt: true,
-          updatedAt: true
-        }
-      },
+  try {
+    return await db.query.transaction.findMany({
+      where: and(
+        eq(transaction.userId, userId),
+        type ? eq(transaction.type, type) : undefined,
+        startDate ? gte(transaction.date, startDate.toISOString().split('T')[0]) : undefined,
+        endDate ? lte(transaction.date, endDate.toISOString().split('T')[0]) : undefined
+      ),
+      orderBy: [desc(transaction.date)],
+      limit: limit,
+      with: {
+        category: {
+          columns: {
+            id: true,
+            name: true,
+            type: true,
+            description: true,
+            createdAt: true,
+            updatedAt: true
+          },
+        },
+      }
+    });
+  } catch (error) {
+    console.error('Error in getTransactions query:', error);
+    
+    // If the relational query fails, try getting transactions without the category relation
+    try {
+      const transactions = await db.query.transaction.findMany({
+        where: and(
+          eq(transaction.userId, userId),
+          type ? eq(transaction.type, type) : undefined,
+          startDate ? gte(transaction.date, startDate.toISOString().split('T')[0]) : undefined,
+          endDate ? lte(transaction.date, endDate.toISOString().split('T')[0]) : undefined
+        ),
+        orderBy: [desc(transaction.date)],
+        limit: limit,
+      });
+      
+      // Add a placeholder category for each transaction
+      return transactions.map(t => ({
+        ...t,
+        category: null
+      }));
+    } catch (secondaryError) {
+      console.error('Secondary error getting transactions without category relation:', secondaryError);
+      throw error; // Re-throw the original error
     }
-  });
+  }
 };
 
 export const getTransactionById = async (db: Database, id: number) => {

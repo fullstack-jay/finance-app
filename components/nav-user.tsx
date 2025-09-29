@@ -3,10 +3,8 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import {
-  IconCreditCard,
   IconDotsVertical,
   IconLogout,
-  IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react"
 
@@ -31,38 +29,22 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-export function NavUser({
-  user,
-  onSignOut,
-}: {
+type NavUserProps = {
   user: {
     name: string
     email: string
     avatar: string
   }
-  onSignOut?: () => void
-}) {
+  onSignOut: () => Promise<void>
+}
+
+export function NavUser({ user, onSignOut }: NavUserProps) {
   const { isMobile } = useSidebar()
   const router = useRouter()
   const [isSigningOut, setIsSigningOut] = useState(false)
 
-  const handleSignOut = async () => {
-    setIsSigningOut(true)
-    try {
-      if (onSignOut) {
-        onSignOut()
-      } else {
-        router.push("/")
-      }
-    } catch (error) {
-      console.error("Sign out error:", error)
-    } finally {
-      setIsSigningOut(false)
-    }
-  }
-
   const userInitials = user.name
-    ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase()
+    ? user.name[0].toUpperCase()
     : user.email[0].toUpperCase()
 
   return (
@@ -113,13 +95,19 @@ export function NavUser({
                 <IconUserCircle />
                 Account
               </DropdownMenuItem>
-              {/* <DropdownMenuItem>
-                <IconNotification />
-                Notifications
-              </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut} disabled={isSigningOut}>
+            <DropdownMenuItem 
+              onClick={async () => {
+                setIsSigningOut(true)
+                try {
+                  await onSignOut()
+                } finally {
+                  setIsSigningOut(false)
+                }
+              }} 
+              disabled={isSigningOut}
+            >
               <IconLogout />
               {isSigningOut ? "Signing out..." : "Log out"}
             </DropdownMenuItem>

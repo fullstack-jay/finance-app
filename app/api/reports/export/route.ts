@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { auth } from '@/lib/auth';
+import { currentUser } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { transaction, category } from '@/db/schema/finance';
 import { eq, and, gte, lte } from 'drizzle-orm';
@@ -7,15 +7,15 @@ import { format } from 'date-fns';
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: req.headers,
-    });
+    // Get the current user from Clerk
+    const user = await currentUser();
 
-    if (!session) {
+    if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = session.user.id;
+    // Use Clerk's user ID
+    const userId = user.id;
     const body = await req.json();
     const { fromDate, toDate, format: exportFormat } = body;
 

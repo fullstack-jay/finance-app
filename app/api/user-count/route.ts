@@ -3,6 +3,8 @@ import { db } from '@/db';
 import { user } from '@/db/schema/auth';
 import { count, eq } from 'drizzle-orm';
 
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     const result = await db.select({ count: count() }).from(user);

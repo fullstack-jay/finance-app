@@ -16,8 +16,9 @@ A comprehensive financial management application built with Next.js, Drizzle ORM
 - **Frontend**: Next.js 15 with App Router
 - **Styling**: Tailwind CSS with shadcn/ui components
 - **Backend**: Next.js API Routes
-- **Database**: PostgreSQL with Drizzle ORM
-- **Authentication**: Better Auth
+- **Database**: PostgreSQL with Drizzle ORM and Supabase
+- **Authentication**: Clerk
+- **AI Features**: AI SDK with Conversational Financial Logging and Insights
 - **Deployment**: Docker
 
 ## Getting Started
@@ -27,6 +28,7 @@ A comprehensive financial management application built with Next.js, Drizzle ORM
 - Node.js 18+
 - Docker and Docker Compose
 - PostgreSQL (via Docker)
+- Clerk Account (for authentication)
 
 ### Installation
 
@@ -44,7 +46,7 @@ A comprehensive financial management application built with Next.js, Drizzle ORM
 3. Set up environment variables:
    ```bash
    cp .env.example .env
-   # Update .env with your configuration
+   # Update .env with your Clerk and Supabase configuration
    ```
 
 4. Start the database:
@@ -68,14 +70,13 @@ A comprehensive financial management application built with Next.js, Drizzle ORM
    ```
 
 The application will be available at http://localhost:3000
+- Authentication is handled by Clerk at /sign-in and /sign-up
 
 ## Project Structure
 
 ```
 ├── app/                 # Next.js app router pages
 │   ├── dashboard/       # Dashboard pages
-│   ├── sign-in/         # Sign in page
-│   ├── sign-up/         # Sign up page
 │   └── api/             # API routes
 ├── components/          # React components
 ├── db/                  # Database schema and utilities
