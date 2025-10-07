@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import { Database } from './types';
+import { Database } from './supabase/types';
+
 
 // Create Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
